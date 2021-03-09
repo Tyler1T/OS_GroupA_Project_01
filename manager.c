@@ -6,35 +6,46 @@
 #include <stdlib.h>	// for exit(1)
 #include <string.h>	// for strlen
 #include <sys/wait.h>	// for wait
+#include <fcntl.h> //for file stuff
 
-int manager(int argc, char const *argv[]) {
-  char *name[30];
-  char *title[30];
-  char *status[30];
+int main() {
+  char *temp[30];
+  char *toSend[93];
   int fd;
-  char *pipe = "/tmp/pipe";
-  
+  char *pipe = "pipe";
+
   /* create the FIFO (named pipe) */
   mkfifo(pipe, 0666);
+  printf("hang\n");
+  // Open pipe as write only for the manager
+  if ((fd = open(pipe, O_WRONLY | O_CREAT)) < 0){
+      printf("Pipe did not open\n");
+      return 0;
+  }
+  printf("hang\n");
 
-  // Open pipe as read only for the manager
-  fd = open(pipe, O_WRONLY);
+  while(1==1){
+    printf("Hello, What employee would you like information on?\n");
+    scanf("%[^\n]%*c", temp);
+    strcat(*toSend, *temp);
+    strcat(*toSend, ",");
 
-  printf("Hello, What employee would you like information on?\n");
-  scanf("%[^\n]%*c", name);
+    printf("What is %s's job title?\n", temp);
+    scanf("%[^\n]%*c", temp);
+    strcat(*toSend, *temp);
+    strcat(*toSend, ",");
 
-  printf("What is %s's job title?\n", name);
-  scanf("%[^\n]%*c", title);
+    printf("What is %s's job status?\n", temp);
+    scanf("%[^\n]%*c", temp);
+    strcat(*toSend, *temp);
 
-  printf("What is %s's job status?\n", name);
-  scanf("%[^\n]%*c", status);
+    printf("You are looking for: %s\n", toSend);
 
-  printf("%s\t%s\t%s\n", name, title, status);
+    //writing info to pipe
+    write(fd, toSend, sizeof(toSend));
+  }
 
-
-
-  //
-  write(fd, "Hi", sizeof("Hi"));
+  // Close plpe
   close(fd);
 
   /* remove the FIFO */
