@@ -6,26 +6,30 @@
 #include <stdlib.h>	// for exit(1)
 #include <string.h>	// for strlen
 #include <sys/wait.h>	// for wait
+#include <fcntl.h> //for file stuff
 
-void assistant() {
+
+int main() {
   char *name[30];
   char *title[30];
   char *status[30];
+  char temp [93];
   int fd;
-  char *pipe = "/tmp/pipe";
+  char pipe[] = "./tmp/pipe";
 
   /* create the FIFO (named pipe) */
   mkfifo(pipe, 0666);
 
   // Open pipe as read only for the manager
-  fd = open(pipe, O_RONLY);
+  fd = open(pipe, O_RDONLY | O_CREAT);
 
-  while(true){
-    read(fd, name, sizeof(name));
-    printf("Manager is looking for: %s, %s, %s\n", name, title, status);
+  while(1 == 1){
+    if(read(fd, temp, sizeof(temp) + 1) != 0){
+      sscanf(temp, "%[^,]%*c%[^,]%*c%[^\n]%*c", &name, title, status);
+      printf("Manager is looking for: %s, %s, %s\n", name, title, status);
+    }
 
     //writing info to pipe
-    read(fd, name, sizeof(name));
   }
 
   // Close plpe
