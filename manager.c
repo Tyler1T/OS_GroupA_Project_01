@@ -9,40 +9,39 @@
 #include <fcntl.h> //for file stuff
 
 int main() {
-  char *temp[30];
-  char *toSend[93];
+  char temp[30];
+  char toSend[93];
   int fd;
-  char *pipe = "pipe";
+  char pipe[] = "./tmp/pipe";
 
   /* create the FIFO (named pipe) */
   mkfifo(pipe, 0666);
-  printf("hang\n");
   // Open pipe as write only for the manager
-  if ((fd = open(pipe, O_WRONLY | O_CREAT)) < 0){
-      printf("Pipe did not open\n");
-      return 0;
-  }
-  printf("hang\n");
+  fd = open(pipe, O_WRONLY | O_CREAT);
 
-  while(1==1){
+
+  while(1==1){ //Get user info and put in a single character array
     printf("Hello, What employee would you like information on?\n");
     scanf("%[^\n]%*c", temp);
-    strcat(*toSend, *temp);
-    strcat(*toSend, ",");
+    printf("%s\n", temp);
+    strcat(toSend,  temp);
+    strcat(toSend, ",");
 
-    printf("What is %s's job title?\n", temp);
+    printf("What is their job title?\n", temp);
     scanf("%[^\n]%*c", temp);
-    strcat(*toSend, *temp);
-    strcat(*toSend, ",");
+    strcat(toSend,  temp);
+    strcat(toSend, ",");
 
-    printf("What is %s's job status?\n", temp);
+    printf("What is their job status?\n", temp);
     scanf("%[^\n]%*c", temp);
-    strcat(*toSend, *temp);
+    strcat(toSend,  temp);
+    strcat(toSend, ",");
 
     printf("You are looking for: %s\n", toSend);
+    printf("The assistant will report back to you shortly in their terminal\n\n");
 
-    //writing info to pipe
-    write(fd, toSend, sizeof(toSend));
+    //writing info to pipe for the assistant
+    write(fd, toSend, sizeof(toSend) + 1);
   }
 
   // Close plpe
