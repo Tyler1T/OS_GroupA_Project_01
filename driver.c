@@ -6,6 +6,9 @@
 #include <stdlib.h>	// for exit(1)
 #include <string.h>	// for strlen
 #include <sys/wait.h>	// for wait
+#include "manager.c"
+#include "assistant.c"
+
 
 
 int main(int argc, char const *argv[]) {
@@ -15,7 +18,7 @@ int main(int argc, char const *argv[]) {
   if(pid < 0){
     fprintf(stderr, "fork failed..\n");
   }else if(pid == 0){ //Assistant process
-
+    assistant();
   }else{ //Manager process
     manager();
   }

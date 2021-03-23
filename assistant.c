@@ -9,7 +9,7 @@
 #include <fcntl.h> //for file stuff
 
 
-int main() {
+int assistant() {
   char *name[30];
   char *title[30];
   char *status[30];

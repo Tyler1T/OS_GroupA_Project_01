@@ -8,7 +8,7 @@
 #include <sys/wait.h>	// for wait
 #include <fcntl.h> //for file stuff
 
-int main() {
+int manager() {
   char temp[30];
   char toSend[93];
   int fd;
