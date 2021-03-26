@@ -15,17 +15,17 @@ int main() {
   char *status[30];
   char temp [93];
   int fd;
-  char pipe[] = "./pipe";
+  char pipe[] = ".pipe";
 
   /* create the FIFO (named pipe) */
   mkfifo(pipe, 0666);
 
   // Open pipe as read only for the assistant
   fd = open(pipe, O_RDONLY);
-  if(fd < 0) printf("Pipe failure\n");
-  
+  if(fd < 0) perror("Pipe failure");
+
   while(1 == 1){
-      sleep(100);
+      sleep(1);
       if(read(fd, &temp, sizeof(temp) + 1) < 0) perror("Stuck");
       sscanf(temp, "%[^,]%*c%[^,]%*c%[^\n]%*c", &name, title, status);
       printf("Manager is looking for: %s, %s, %s\n", name, title, status);
