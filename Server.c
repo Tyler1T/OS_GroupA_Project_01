@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <pthread.h>
+#include <ctype.h>
 #include "defs.h"
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -12,9 +13,27 @@ typedef struct
 {
     int desiredID;
     char* fileName;
-} 
+}
 fileParam;
 
+bool equalsIgnoreCase(char* str1, char* str2)
+{
+    if (strlen(str1) != strlen(str2))
+    {
+        return FALSE;
+    }
+    else
+    {
+        for (int i = 0; i < strlen(str1); i++)
+        {
+            if (tolower(str1[i]) != tolower(str2[i]))
+            {
+                return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
 void *readFile(void *arg)
 {
     //Implicitly cast the function argument to the struct containing arguments.
@@ -59,11 +78,11 @@ int main()
 
     while (1)
     {
-        listen(server_socket, 1);
+        listen(server_socket, 5);
 
         int client_socket;
         client_socket = accept(server_socket, NULL, NULL);
-    
+
         char query[256] = {0};
         recv(client_socket, query, sizeof(query), 0);
         printf("%s\n", query);
@@ -78,7 +97,7 @@ int main()
             if (count >= 0)
             {
                 sscanf(buffer, "%d,%[^\r\n]", &id, name);
-                if (strcmp(query, name) == 0)
+                if (equalsIgnoreCase(query, name)==TRUE)
                 {
                     printf("MATCH FOUND\n");
                     foundMatch = TRUE;
@@ -103,14 +122,14 @@ int main()
 
             pthread_join(Salaries, &result1);
             pthread_join(Satisfaction, &result2);
-            
+
             char *str1 = result1, *str2 = result2;
             printf("%s\n", str1);
             printf("%s\n", str2);
             char returnString[1024] = {0};
             sprintf(returnString, "%d,%s,", id, name);
             strcat(returnString, str1);
-            strcat(returnString,str2);
+            strcat(returnString,",");
             strcat(returnString, str2);
 
             free(str1);
@@ -120,7 +139,6 @@ int main()
         }
         //printf("%s", readFile(id, "Salaries.txt"));
         //printf("%s", readFile(id, "SatisfactionLevel.txt"));
-}
-
+    }
 
 }
