@@ -8,7 +8,7 @@
 #include <sys/wait.h>	// for wait
 #include <fcntl.h> //for file stuff
 
-int main() {
+int manager() {
   char temp[30];
   char toSend[93];
   int fd;
@@ -18,8 +18,7 @@ int main() {
   mkfifo(pipe, 0666);
 
   // Open pipe as write only for the manager
-  fd = open(pipe, O_WRONLY | O_CREAT);
-  if(fd < 0) perror("Pipe failure");
+  if((fd = open(pipe, O_WRONLY | O_CREAT)) < 0) perror("Pipe failure");
 
   while(1 == 1){ //Get user info and put in a single character array
     printf("Hello, What employee would you like information on?\n");
@@ -41,8 +40,6 @@ int main() {
 
     //writing info to pipe for the assistant
     if(write(fd, toSend, sizeof(toSend) + 1) < 0) perror("Write Failure");
-
-    //write(fd, toSend, sizeof(toSend) + 1);
   }
 
   // Close plpe

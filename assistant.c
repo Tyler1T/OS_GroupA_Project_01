@@ -9,7 +9,7 @@
 #include <fcntl.h> //for file stuff
 
 
-int main() {
+int assistant() {
   char *name[30];
   char *title[30];
   char *status[30];
@@ -21,12 +21,10 @@ int main() {
   mkfifo(pipe, 0666);
 
   // Open pipe as read only for the assistant
-  fd = open(pipe, O_RDONLY);
-  if(fd < 0) perror("Pipe failure");
+  if((fd = open(pipe, O_RDONLY | O_CREAT)) < 0) perror("Pipe failure");
 
   while(1 == 1){
-      sleep(1);
-      if(read(fd, &temp, sizeof(temp) + 1) < 0) perror("Stuck");
+      if(read(fd, &temp, sizeof(temp) + 1) < 0) perror("Read failure");
       sscanf(temp, "%[^,]%*c%[^,]%*c%[^\n]%*c", &name, title, status);
       printf("Manager is looking for: %s, %s, %s\n", name, title, status);
       // Go looking for the employee here
