@@ -20,6 +20,7 @@ int main(){
     char storeC;
     // check number of lines written in file
     FILE *fp = fopen("History.txt", "r");
+
     while((storeC = fgetc(fp)) != EOF){
 	    if(storeC == '\n'){
 		    LineCount++;
@@ -53,7 +54,6 @@ int main(){
        	 close(network_socket);
 //	}
     }
-
 
     return 0;
 }

@@ -4,14 +4,13 @@
 
 void searchHistory(char *findItem);
 
-void main()
-{
+void main(){
     char name[255]="ThOMas is ";
-    searchHistory(name)  ;
+    searchHistory(name);
 }
 
 void searchHistory(char *findItem){
-    FILE* fpointer;
+  FILE* fpointer;
 	int wordExists=0;
 	int bufferLength = 255;
 
@@ -19,8 +18,7 @@ void searchHistory(char *findItem){
 	fpointer = fopen("history.txt", "r");
 
 	/* fopen() return NULL if last operation was unsuccessful */
-    if(fpointer == NULL)
-    {
+    if(fpointer == NULL){
         /* File not created hence, create the file and exit */
         printf("No history file found.\n");
         printf("\nCreating a new history file...\n");
@@ -30,14 +28,12 @@ void searchHistory(char *findItem){
     }
 
     //copies the contents in the file to a character buffer
-	while(fgets(buffer, bufferLength, fpointer))
-	{
+	while(fgets(buffer, bufferLength, fpointer)){
 	    //substring of the buffer and the string item to search
 	    //and checks if the search string is in file
 	    //THE StrStrIA is a function that ignores case when comparing strings
 		char *ptr = StrStrIA(buffer,findItem);
-		if (ptr != NULL)
-		{
+		if (ptr != NULL){
 			wordExists=1;
 			break;
 		}
@@ -45,15 +41,12 @@ void searchHistory(char *findItem){
 	fclose(fpointer);
 
 	//check if the string exists the history file
-	if (wordExists==1)
-	{
+	if (wordExists==1){
 		printf("String exists.");
-	}
-	else
-	{
+	}else{
 		printf("String does not exist.\n");
 		printf("Will add strings to history file...\n");
-
 	}
-		fclose(fpointer);
+
+	fclose(fpointer);
 }
