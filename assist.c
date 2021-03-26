@@ -31,13 +31,10 @@ int main(){
     char outgoingBuffer[256], incomingBuffer[256];
     /*Connect to the server and verify that the connection succeeded*/
     int connection_status = connect(network_socket, (struct sockaddr*)&server_address, sizeof(server_address));
-    if (connection_status == -1)
-    {
+    if (connection_status == -1){
         perror("There was an error establishing a connection");
         exit(EXIT_FAILURE);
-    }
-    else
-    {
+    }else{
 //	while(1){
        	 printf("Enter a query: ");
        	 scanf("%[^\n]", outgoingBuffer);

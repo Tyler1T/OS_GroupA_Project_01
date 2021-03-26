@@ -7,7 +7,7 @@
 #include <string.h>	// for strlen
 #include <sys/wait.h>	// for wait
 #include <fcntl.h> //for file stuff
-
+#include "defs.h" //our definitions
 
 int assistant() {
   char *name[30];
@@ -23,7 +23,7 @@ int assistant() {
   // Open pipe as read only for the assistant
   if((fd = open(pipe, O_RDONLY | O_CREAT)) < 0) perror("Pipe failure");
 
-  while(1 == 1){
+  while(TRUE){
       if(read(fd, &temp, sizeof(temp) + 1) < 0) perror("Read failure");
       sscanf(temp, "%[^,]%*c%[^,]%*c%[^\n]%*c", &name, title, status);
       printf("Manager is looking for: %s, %s, %s\n", name, title, status);

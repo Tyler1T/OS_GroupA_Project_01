@@ -16,16 +16,12 @@ typedef struct{
 fileParam;
 
 bool equalsIgnoreCase(char* str1, char* str2){
-    if (strlen(str1) != strlen(str2))
-    {
+    if (strlen(str1) != strlen(str2)){
         return FALSE;
     }
-    else
-    {
-        for (int i = 0; i < strlen(str1); i++)
-        {
-            if (tolower(str1[i]) != tolower(str2[i]))
-            {
+    else{
+        for (int i = 0; i < strlen(str1); i++){
+            if (tolower(str1[i]) != tolower(str2[i])){
                 return FALSE;
             }
         }
@@ -98,7 +94,7 @@ int main(){
         }
         fclose(infile);
 
-        if (!foundMatch){
+        if(!foundMatch){
             printf("The Employee %s Was Not Found.\n", query);
             send(client_socket, INVALID_QUERY, sizeof(INVALID_QUERY), 0);
         }else{

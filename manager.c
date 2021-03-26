@@ -7,6 +7,7 @@
 #include <string.h>	// for strlen
 #include <sys/wait.h>	// for wait
 #include <fcntl.h> //for file stuff
+#include "defs.h" //our definitions
 
 int manager() {
   char temp[30];
@@ -20,7 +21,7 @@ int manager() {
   // Open pipe as write only for the manager
   if((fd = open(pipe, O_WRONLY | O_CREAT)) < 0) perror("Pipe failure");
 
-  while(1 == 1){ //Get user info and put in a single character array
+  while(TRUE){ //Get user info and put in a single character array
     printf("Hello, What employee would you like information on?\n");
     scanf("%[^\n]%*c", temp);
     strcat(toSend,  temp);
