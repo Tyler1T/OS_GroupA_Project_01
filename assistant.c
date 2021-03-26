@@ -9,27 +9,28 @@
 #include <fcntl.h> //for file stuff
 
 
-int assistant() {
+int main() {
   char *name[30];
   char *title[30];
   char *status[30];
   char temp [93];
   int fd;
-  char pipe[] = "./tmp/pipe";
+  char pipe[] = "./pipe";
 
   /* create the FIFO (named pipe) */
   mkfifo(pipe, 0666);
 
-  // Open pipe as read only for the manager
-  fd = open(pipe, O_RDONLY | O_CREAT);
-
+  // Open pipe as read only for the assistant
+  fd = open(pipe, O_RDONLY);
+  if(fd < 0) printf("Pipe failure\n");
+  
   while(1 == 1){
-    if(read(fd, temp, sizeof(temp) + 1) != 0){
+      sleep(100);
+      if(read(fd, &temp, sizeof(temp) + 1) < 0) perror("Stuck");
       sscanf(temp, "%[^,]%*c%[^,]%*c%[^\n]%*c", &name, title, status);
       printf("Manager is looking for: %s, %s, %s\n", name, title, status);
-    }
-
-    //writing info to pipe
+      // Go looking for the employee here
+      //reading info from pipe
   }
 
   // Close plpe

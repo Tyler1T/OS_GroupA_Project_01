@@ -9,9 +9,8 @@
 #include <wait.h>
 #define FILEPATH "History.txt"
 
-int main()
-{    
-	
+int main(){
+
     int network_socket = socket(AF_INET,SOCK_STREAM, 0);
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
@@ -28,7 +27,7 @@ int main()
     }
 //    printf("%d\n", LineCount);
     fp = fopen("History.txt", "a");
-   
+
     char outgoingBuffer[256], incomingBuffer[256];
     /*Connect to the server and verify that the connection succeeded*/
     int connection_status = connect(network_socket, (struct sockaddr*)&server_address, sizeof(server_address));
@@ -58,6 +57,6 @@ int main()
 //	}
     }
 
-   
+
     return 0;
 }

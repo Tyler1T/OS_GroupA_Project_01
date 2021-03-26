@@ -9,15 +9,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-typedef struct
-{
+typedef struct{
     int desiredID;
     char* fileName;
 }
 fileParam;
 
-bool equalsIgnoreCase(char* str1, char* str2)
-{
+bool equalsIgnoreCase(char* str1, char* str2){
     if (strlen(str1) != strlen(str2))
     {
         return FALSE;
@@ -34,8 +32,7 @@ bool equalsIgnoreCase(char* str1, char* str2)
     }
     return TRUE;
 }
-void *readFile(void *arg)
-{
+void *readFile(void *arg){
     //Implicitly cast the function argument to the struct containing arguments.
     fileParam *p = arg;
     int desiredID = p->desiredID;
@@ -47,13 +44,10 @@ void *readFile(void *arg)
     int id = 0;
     int count = -1;
     char *returnString = malloc(sizeof(char) * 1024);
-    while (fgets(buffer, 1024, infile))
-    {
-        if (count >= 0)
-        {
+    while (fgets(buffer, 1024, infile)){
+        if (count >= 0){
             sscanf(buffer, "%d,%[^\r\n]", &id, returnString);
-            if (id == desiredID)
-            {
+            if (id == desiredID){
                 //printf("%s", buffer);
                 break;
             }
@@ -64,8 +58,8 @@ void *readFile(void *arg)
     //sprintf(returnString, "%s", buffer);
     return returnString;
 }
-int main()
-{
+
+int main(){
 
     int server_socket;
     server_socket = socket(AF_INET,SOCK_STREAM, 0);
@@ -76,8 +70,7 @@ int main()
     bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address));
 
 
-    while (1)
-    {
+    while (1){
         listen(server_socket, 5);
 
         int client_socket;
@@ -92,13 +85,10 @@ int main()
         bool foundMatch = FALSE;
         int id = 0;
         int count = -1;
-        while (fgets(buffer, 1024, infile))
-        {
-            if (count >= 0)
-            {
+        while (fgets(buffer, 1024, infile)){
+            if (count >= 0){
                 sscanf(buffer, "%d,%[^\r\n]", &id, name);
-                if (equalsIgnoreCase(query, name)==TRUE)
-                {
+                if (equalsIgnoreCase(query, name)==TRUE){
                     printf("MATCH FOUND\n");
                     foundMatch = TRUE;
                     break;
@@ -108,12 +98,10 @@ int main()
         }
         fclose(infile);
 
-        if (!foundMatch)
-        {
+        if (!foundMatch){
             printf("The Employee %s Was Not Found.\n", query);
             send(client_socket, INVALID_QUERY, sizeof(INVALID_QUERY), 0);
-        }
-        else{
+        }else{
             pthread_t Salaries, Satisfaction;
             fileParam t1 = {id, "Salaries.txt"}, t2 = {id, "SatisfactionLevel.txt"};
             void *result1, *result2;
