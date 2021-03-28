@@ -77,7 +77,6 @@ void assistant(){
 
 		//Check for info in History.txt first
 	    while(fgets(buffer, 1024, infile) != NULL){
-			printf("HERE\n");
 	        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
 
 	        if (strcmp(job, "") == 0){
