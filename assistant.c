@@ -68,70 +68,74 @@ void assistant(){
 		    LineCount++;
 	    }
     }
+
+
 	while(TRUE){
 		//Get query from manager through the pipe
 		if(read(fd, &query, sizeof(query) + 1) < 0) perror("Read failure");
 		sscanf(query, "%[^,]%*c%[^,]%*c%[^\n]%*c", nameQuery, jobQuery, statusQuery);
 
 		//Check for info in History.txt first
-	    while(fgets(buffer, 1024, infile)){
-
-	        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]",name,job,status);
+	    while(fgets(buffer, 1024, infile) != NULL){
+			printf("HERE\n");
+	        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
 
 	        if (strcmp(job, "") == 0){
-	            sscanf(buffer, "%*d,%[^,],%[^,],%*f,%*f,%*f,%[^,],%*[^\n\r]",name,job,status);
+	            sscanf(buffer, "%*d,%[^,],%[^,],%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
 	        }
 
 	        if (equalsIgnoreCase(name, nameQuery) && equalsIgnoreCase(job, jobQuery) && equalsIgnoreCase(status, statusQuery)){
 	      	    termPrinter("Record found in File");
 	      	    termPrinter(buffer);
-	            //printf("Query: %s\n", query);
-	            //printf("Name: %s, Job: %s, Status: %s.\n", name, job, status);
+	            printf("Query: %s\n", query);
+	            printf("Name: %s, Job: %s, Status: %s.\n", name, job, status);
 	            history = TRUE;
-	        }else{
-				//Send name to server to see if it contains the employee
-				send(network_socket, nameQuery, 256, 0);
-		 	   	recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
+	        }
 
-		 		if(strcmp(incomingBuffer, "INVALID")==0){}
-		 		//if file has 10 lines use position to overwrite records
-		 		else if(LineCount == 10){
-			 		//program uses temp.txt to store records from History.txt
-			 		infile = fopen("History.txt", "r");
-			 	 	ftemp = fopen("temp.txt", "w");
-			 		while((fgets(lineBuffer, 256, infile)) != NULL){
-			 		count++;
-			 			if(count == LinePosition){
-			 				fprintf(ftemp, "%s\n", incomingBuffer);
-			 			}else{
-			 				fprintf(ftemp, "%s", lineBuffer);
-			 			}
-			 		}
-
-			 		fclose(infile);
-			 		fclose(ftemp);
-			 		//replace History.txt with the temp.txt
-			 		remove("History.txt");
-			 		rename("temp.txt", "History.txt");
-			 		LinePosition++;
-			 		if(LinePosition == 11){
-			 			LinePosition = 1;
-			 		}
-			 	}else{
-			 		infile = fopen("History.txt", "a");
-			 	  	fprintf(infile, "%s\n", incomingBuffer);
-			 		fclose(infile);
-			 	}
-
-		 	 	termPrinter(incomingBuffer);
-			}
-
-	        strcpy(job, "");
 	    }
 
+		if(!history){
+			//Send name to server to see if it contains the employee
+			send(network_socket, nameQuery, 256, 0);
+			recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
+
+			if(strcmp(incomingBuffer, "INVALID")==0){}
+			//if file has 10 lines use position to overwrite records
+			else if(LineCount == 10){
+				//program uses temp.txt to store records from History.txt
+				infile = fopen("History.txt", "r");
+				ftemp = fopen("temp.txt", "w");
+				while((fgets(lineBuffer, 256, infile)) != NULL){
+				count++;
+					if(count == LinePosition){
+						fprintf(ftemp, "%s\n", incomingBuffer);
+					}else{
+						fprintf(ftemp, "%s", lineBuffer);
+					}
+				}
+
+				fclose(infile);
+				fclose(ftemp);
+				//replace History.txt with the temp.txt
+				remove("History.txt");
+				rename("temp.txt", "History.txt");
+				LinePosition++;
+				if(LinePosition == 11){
+					LinePosition = 1;
+				}
+			}else{
+				infile = fopen("History.txt", "a");
+				fprintf(infile, "%s\n", incomingBuffer);
+				fclose(infile);
+			}
+
+			termPrinter(incomingBuffer);
+		}
+
+		history = FALSE;
 
 	}
-close(network_socket);
+	close(network_socket);
 }
 
 char path[20] = "/dev/pts/";
