@@ -129,9 +129,9 @@ void assistant(){
 	        strcpy(job, "");
 	    }
 
-		close(network_socket);
-	}
 
+	}
+close(network_socket);
 }
 
 char path[20] = "/dev/pts/";
