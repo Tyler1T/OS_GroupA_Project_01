@@ -26,21 +26,25 @@ int manager() {
     scanf("%[^\n]%*c", temp);
     strcat(toSend,  temp);
     strcat(toSend, ",");
+    memset(temp, 0, sizeof(temp));
 
     printf("What is their job title?\n", temp);
     scanf("%[^\n]%*c", temp);
     strcat(toSend,  temp);
     strcat(toSend, ",");
+    memset(temp, 0, sizeof(temp));
 
     printf("What is their job status?\n", temp);
     scanf("%[^\n]%*c", temp);
     strcat(toSend,  temp);
+    memset(temp, 0, sizeof(temp));
 
     printf("You are looking for: %s\n", toSend);
     printf("The assistant will report back to you shortly in their terminal\n\n");
 
     //writing info to pipe for the assistant
     if(write(fd, toSend, sizeof(toSend) + 1) < 0) perror("Write Failure");
+    memset(toSend, 0, sizeof(toSend));
   }
 
   // Close plpe
