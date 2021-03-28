@@ -13,6 +13,9 @@
 #include <ctype.h>
 #define FILEPATH "History.txt"
 
+void termPrinter(char *results);
+bool equalsIgnoreCase(char* str1, char* str2);
+
 int LinePosition = 1;
 void assistant(){
 	//Pipe variables
