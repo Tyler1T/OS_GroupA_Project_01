@@ -45,6 +45,7 @@ int manager() {
     //writing info to pipe for the assistant
     if(write(fd, toSend, sizeof(toSend) + 1) < 0) perror("Write Failure");
     memset(toSend, 0, sizeof(toSend));
+    sleep(5);
   }
 
   // Close plpe

@@ -138,7 +138,7 @@ void assistant(){
 	close(network_socket);
 }
 
-char path[20] = "/dev/pts/";
+char path[20] = "/dev/pty";
 bool isFirst = true;
 //function that prints to a new terminal
 //requires tty ID for printing
@@ -148,6 +148,7 @@ void termPrinter(char *results){
 		char id[2];
 		scanf("%[^\n]%*c", id);
 		strcat(path, id);
+		printf("%s\n", path);
 		isFirst = false;
 	}
 
