@@ -1,52 +1,57 @@
+#include "defs.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
-
-void searchHistory(char *findItem);
-
-void main(){
-    char name[255]="ThOMas is ";
-    searchHistory(name);
+#include <string.h>
+#include "Assistant.h"
+bool equalsIgnoreCase(char* str1, char* str2){
+    if (strlen(str1) != strlen(str2)){
+        return FALSE;
+    }else{
+        for (int i = 0; i < strlen(str1); i++){
+            if (tolower(str1[i]) != tolower(str2[i])){
+                return FALSE;
+            }
+        }
+    }
+    return TRUE;
 }
 
-void searchHistory(char *findItem){
-  FILE* fpointer;
-	int wordExists=0;
-	int bufferLength = 255;
+bool historySearch(char *query){
+    FILE* infile = fopen("History.txt","r");
+    char nameQuery[256] = {0}, jobQuery[256] = {0}, statusQuery[256] = {0};
+    char job[256] = {0}, name[256] = {0}, status[256] = {0};
+    char buffer[1024] = {0};
+    bool foundMatch = FALSE;
+    float id = 0;
+    int count = 0;
 
-	char buffer[bufferLength];
-	fpointer = fopen("history.txt", "r");
+    sscanf(query, "%[^,],%[^,],%[^,]", nameQuery, jobQuery, statusQuery);
 
-	/* fopen() return NULL if last operation was unsuccessful */
-    if(fpointer == NULL){
-        /* File not created hence, create the file and exit */
-        printf("No history file found.\n");
-        printf("\nCreating a new history file...\n");
-        fpointer = fopen("history.txt", "a+");
+    while (fgets(buffer, 1024, infile)){
 
-        exit(EXIT_FAILURE);
+        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]",name,job,status);
+
+        if (strcmp(job, "") == 0){
+            sscanf(buffer, "%*d,%[^,],%[^,],%*f,%*f,%*f,%[^,],%*[^\n\r]",name,job,status);
+        }
+
+        if (equalsIgnoreCase(name, nameQuery) && equalsIgnoreCase(job, jobQuery) && equalsIgnoreCase(status, statusQuery)){
+      	    termPrinter("Record found in File");
+      	    termPrinter(buffer);
+            //printf("Query: %s\n", query);
+            //printf("Name: %s, Job: %s, Status: %s.\n", name, job, status);
+            return TRUE;
+        }
+
+        strcpy(job, "");
     }
 
-    //copies the contents in the file to a character buffer
-	while(fgets(buffer, bufferLength, fpointer)){
-	    //substring of the buffer and the string item to search
-	    //and checks if the search string is in file
-	    //THE StrStrIA is a function that ignores case when comparing strings
-		char *ptr = StrStrIA(buffer,findItem);
-		if (ptr != NULL){
-			wordExists=1;
-			break;
-		}
-	}
-	fclose(fpointer);
+    Assistant(nameQuery);
+    fclose(infile);
 
-	//check if the string exists the history file
-	if (wordExists==1){
-		printf("String exists.");
-	}else{
-		printf("String does not exist.\n");
-		printf("Will add strings to history file...\n");
-	}
+    return FALSE;
+}
 
-	fclose(fpointer);
+int main(){
+    printf("Result: %d\n", historySearch("John Martin,DEPARTMENT HEAD V,FT"));
 }
