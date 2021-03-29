@@ -1,3 +1,11 @@
+/**
+ * Author: Dillon Evans
+ * Email: <dillon.e.evans@okstate.edu>
+ * Date: March 8th, 2020
+ * Program Description: This file creates a socket server that accepts queries from a client.
+ * It searches the ID file for the name, then creates two threads to aggregate data 
+ * efficiently. The threads are then joined and the results are returned to the client.
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -65,12 +73,12 @@ int main(){
     server_address.sin_addr.s_addr = INADDR_ANY;
     bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address));
 
+    listen(server_socket, 1);
+
+    int client_socket;
+    client_socket = accept(server_socket, NULL, NULL);
 
     while(1){
-        listen(server_socket, 5);
-
-        int client_socket;
-        client_socket = accept(server_socket, NULL, NULL);
 
         char query[256] = {0};
         recv(client_socket, query, sizeof(query), 0);
@@ -119,6 +127,7 @@ int main(){
             free(str1);
             free(str2);
             printf("%s", returnString);
+            printf("Return String: %s\n", returnString);
             send(client_socket, returnString, sizeof(returnString), 0);
         }
         //printf("%s", readFile(id, "Salaries.txt"));

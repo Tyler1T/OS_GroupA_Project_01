@@ -1,3 +1,4 @@
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,12 +12,15 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <fcntl.h>
 #define FILEPATH "History.txt"
 
 void termPrinter(char *results);
 bool equalsIgnoreCase(char* str1, char* str2);
-
+FILE *fterm;
 int LinePosition = 1;
+char path[20] = "/dev/pts/";
+bool isFirst = TRUE;
 void assistant(){
 	//Pipe variables
 	int fd;
@@ -74,9 +78,10 @@ void assistant(){
 		//Get query from manager through the pipe
 		if(read(fd, &query, sizeof(query) + 1) < 0) perror("Read failure");
 		sscanf(query, "%[^,]%*c%[^,]%*c%[^\n]%*c", nameQuery, jobQuery, statusQuery);
-
+		printf("Name Query: %s\n", nameQuery);
 		//Check for info in History.txt first
 	    while(fgets(buffer, 1024, infile) != NULL){
+			printf("HERE\n");
 	        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
 
 	        if (strcmp(job, "") == 0){
@@ -97,7 +102,10 @@ void assistant(){
 			//Send name to server to see if it contains the employee
 			send(network_socket, nameQuery, 256, 0);
 			recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
-
+			//Wait for a non empty message to be received. 
+		    while (strcmp(incomingBuffer, "") == 0) {
+				recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
+			}
 			if(strcmp(incomingBuffer, "INVALID")==0){}
 			//if file has 10 lines use position to overwrite records
 			else if(LineCount == 10){
@@ -127,18 +135,15 @@ void assistant(){
 				fprintf(infile, "%s\n", incomingBuffer);
 				fclose(infile);
 			}
-
+			printf("INC: %s\n", incomingBuffer);
 			termPrinter(incomingBuffer);
 		}
-
 		history = FALSE;
-
 	}
 	close(network_socket);
 }
 
-char path[20] = "/dev/pty";
-bool isFirst = true;
+
 //function that prints to a new terminal
 //requires tty ID for printing
 void termPrinter(char *results){
@@ -148,10 +153,10 @@ void termPrinter(char *results){
 		scanf("%[^\n]%*c", id);
 		strcat(path, id);
 		printf("%s\n", path);
-		isFirst = false;
+		isFirst = FALSE;
 	}
 
-	FILE *fterm = fopen(path, "wr");
+	fterm = fopen(path, "wr");
 
 	if(fterm != NULL){
 		fprintf(fterm, "%s\n", results);
