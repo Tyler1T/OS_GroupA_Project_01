@@ -14,6 +14,10 @@
 #include <fcntl.h>
 #define FILEPATH "History.txt"
 
+//Group A
+//Nikul Patel - worked on what to do after query was sent to server, and termPrinter function
+//nikul.patel@okstate.edu
+
 //void termPrinter(char *results);
 bool equalsIgnoreCase(char* str1, char* str2);
 FILE *fterm;
