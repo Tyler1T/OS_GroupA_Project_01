@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -15,12 +14,14 @@
 #include <fcntl.h>
 #define FILEPATH "History.txt"
 
-void termPrinter(char *results);
+//void termPrinter(char *results);
 bool equalsIgnoreCase(char* str1, char* str2);
 FILE *fterm;
 int LinePosition = 1;
 char path[20] = "/dev/pty";
 bool isFirst = TRUE;
+
+
 void assistant(){
 	//Pipe variables
 	int fd;
@@ -79,24 +80,8 @@ void assistant(){
 		if(read(fd, &query, sizeof(query) + 1) < 0) perror("Read failure");
 		sscanf(query, "%[^,]%*c%[^,]%*c%[^\n]%*c", nameQuery, jobQuery, statusQuery);
 		//Check for info in History.txt first
-	    while(fgets(buffer, 1024, infile) != NULL){
-	        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
 
-	        if (strcmp(job, "") == 0){
-	            sscanf(buffer, "%*d,%[^,],%[^,],%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
-	        }
-
-	        if (equalsIgnoreCase(name, nameQuery) && equalsIgnoreCase(job, jobQuery) && equalsIgnoreCase(status, statusQuery)){
-	      	    termPrinter("Record found in File");
-	      	    termPrinter(buffer);
-	            printf("Query: %s\n", query);
-	            printf("Name: %s, Job: %s, Status: %s.\n", name, job, status);
-	            history = TRUE;
-	        }
-
-	    }
-
-		if(!history){
+		if(!historySearch(query)){
 			//Send name to server to see if it contains the employee
 			send(network_socket, nameQuery, 256, 0);
 			recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
@@ -135,7 +120,6 @@ void assistant(){
 			}
 			termPrinter(incomingBuffer);
 		}
-		history = FALSE;
 	}
 	close(network_socket);
 }

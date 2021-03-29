@@ -1,13 +1,13 @@
+#include "defs.h"
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
 //GROUP A
 //Name: Okonkwo, Thomas Chukwuma
 //CWID: A20308887
 //Email: thomas.okonkwo@okstate.edu
 
-#include "defs.h"
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include "Assistant.h"
 bool equalsIgnoreCase(char* str1, char* str2){
 
     //compares the length of two strings passed
@@ -62,16 +62,13 @@ bool historySearch(char *query){
         }
         //compares and checks for the case sensitivity and ignores case sensitivity
         if (equalsIgnoreCase(name, nameQuery) && equalsIgnoreCase(job, jobQuery) && equalsIgnoreCase(status, statusQuery)){
-	    termPrinter("Record found in File");
-	    termPrinter(buffer); //passed to the termPrinter function
-//	    printf("Query: %s\n", query);
-//	    printf("Name: %s, Job: %s, Status: %s.\n", name, job, status);
+    	    termPrinter("Record found in File");
+    	    termPrinter(buffer); //passed to the termPrinter function
             return TRUE;
         }
         strcpy(job, "");
     }
-    //passed to the assistant function
-    Assistant(nameQuery);
+
     fclose(infile);  //closed the file
     return FALSE;
 }
