@@ -78,10 +78,8 @@ void assistant(){
 		//Get query from manager through the pipe
 		if(read(fd, &query, sizeof(query) + 1) < 0) perror("Read failure");
 		sscanf(query, "%[^,]%*c%[^,]%*c%[^\n]%*c", nameQuery, jobQuery, statusQuery);
-		printf("Name Query: %s\n", nameQuery);
 		//Check for info in History.txt first
 	    while(fgets(buffer, 1024, infile) != NULL){
-			printf("HERE\n");
 	        sscanf(buffer, "%*d,%[^,],\"%[^\"]\",%*f,%*f,%*f,%[^,],%*[^\n\r]", name, job, status);
 
 	        if (strcmp(job, "") == 0){
@@ -135,7 +133,6 @@ void assistant(){
 				fprintf(infile, "%s\n", incomingBuffer);
 				fclose(infile);
 			}
-			printf("INC: %s\n", incomingBuffer);
 			termPrinter(incomingBuffer);
 		}
 		history = FALSE;
