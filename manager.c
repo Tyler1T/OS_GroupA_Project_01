@@ -9,6 +9,14 @@
 #include <fcntl.h> //for file stuff
 #include "defs.h" //our definitions
 
+/**
+ * Author: Tyler Tucker
+ * Email: <tyler.m.tucker@okstate.edu>
+ * Date: March 15th, 2020
+ * Program Description: This file takes input from the user and then puts it
+ * together and sends it to the assistant for use until it is terminated
+ */
+
 void manager() {
   char temp[30];
   char toSend[93];
@@ -28,13 +36,13 @@ void manager() {
     strcat(toSend, ",");
     memset(temp, 0, sizeof(temp));
 
-    printf("What is their job title?\n", temp);
+    printf("What is their job title?\n");
     scanf("%[^\n]%*c", temp);
     strcat(toSend,  temp);
     strcat(toSend, ",");
     memset(temp, 0, sizeof(temp));
 
-    printf("What is their job status?\n", temp);
+    printf("What is their job status?\n");
     scanf("%[^\n]%*c", temp);
     strcat(toSend,  temp);
     memset(temp, 0, sizeof(temp));

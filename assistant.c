@@ -23,7 +23,7 @@
 bool equalsIgnoreCase(char* str1, char* str2);
 FILE *fterm;
 int LinePosition = 1;
-char path[20] = "/dev/pty";
+char path[20] = "/dev/pts/";
 bool isFirst = TRUE;
 
 

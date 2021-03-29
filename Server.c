@@ -3,7 +3,7 @@
  * Email: <dillon.e.evans@okstate.edu>
  * Date: March 8th, 2020
  * Program Description: This file creates a socket server that accepts queries from a client.
- * It searches the ID file for the name, then creates two threads to aggregate data 
+ * It searches the ID file for the name, then creates two threads to aggregate data
  * efficiently. The threads are then joined and the results are returned to the client.
  */
 #include <stdlib.h>
