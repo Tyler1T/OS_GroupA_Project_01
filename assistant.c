@@ -19,7 +19,7 @@ void termPrinter(char *results);
 bool equalsIgnoreCase(char* str1, char* str2);
 FILE *fterm;
 int LinePosition = 1;
-char path[20] = "/dev/pts/";
+char path[20] = "/dev/pty";
 bool isFirst = TRUE;
 void assistant(){
 	//Pipe variables
@@ -102,7 +102,7 @@ void assistant(){
 			//Send name to server to see if it contains the employee
 			send(network_socket, nameQuery, 256, 0);
 			recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
-			//Wait for a non empty message to be received. 
+			//Wait for a non empty message to be received.
 		    while (strcmp(incomingBuffer, "") == 0) {
 				recv(network_socket, incomingBuffer, sizeof(incomingBuffer), 0);
 			}
