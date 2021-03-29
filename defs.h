@@ -7,4 +7,6 @@ typedef int bool;
 #define INVALID_QUERY "INVALID"
 bool historySearch(char *query);
 void termPrinter(char *results);
+void assistant();
+void manager();
 #endif

@@ -6,12 +6,9 @@
 #include <stdlib.h>	// for exit(1)
 #include <string.h>	// for strlen
 #include <sys/wait.h>	// for wait
-#include "manager.c"
-#include "assistant.c"
+#include "defs.h"
 
-
-
-int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]){
   pid_t pid;
   pid = fork();
 

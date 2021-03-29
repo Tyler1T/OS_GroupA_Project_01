@@ -17,6 +17,7 @@
 //Group A
 //Nikul Patel - worked on what to do after query was sent to server, and termPrinter function
 //nikul.patel@okstate.edu
+//CWID: A20066980
 
 //void termPrinter(char *results);
 bool equalsIgnoreCase(char* str1, char* str2);
@@ -151,17 +152,4 @@ void termPrinter(char *results){
 	}
 
 	fclose(fterm);
-}
-
-bool equalsIgnoreCase(char* str1, char* str2){
-    if (strlen(str1) != strlen(str2)){
-        return FALSE;
-    }else{
-        for (int i = 0; i < strlen(str1); i++){
-            if (tolower(str1[i]) != tolower(str2[i])){
-                return FALSE;
-            }
-        }
-    }
-    return TRUE;
 }

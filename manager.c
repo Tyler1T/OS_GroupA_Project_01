@@ -9,7 +9,7 @@
 #include <fcntl.h> //for file stuff
 #include "defs.h" //our definitions
 
-int manager() {
+void manager() {
   char temp[30];
   char toSend[93];
   int fd;
@@ -53,5 +53,4 @@ int manager() {
 
   /* remove the FIFO */
   unlink(pipe);
-  return 0;
 }
